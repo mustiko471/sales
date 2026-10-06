@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import { promos } from '../data/promos';
+import { activePromotions } from '../utils/promotions';
+import { site } from '../data/site';
+import { cars } from '../data/cars';
+import WhatsAppButton from './WhatsAppButton.astro';
+import PromoCard from './PromoCard.astro';
+import Icon from './Icon.astro';
+const active = activePromotions(promos);
+---
+
+<section class="section promo-section" id="penawaran">
+  <div class="container">
+    <div class="promo-banner">
+      <div class="promo-copy">
+        <p class="eyebrow">
+          <span class="red-line"></span> SELANGKAH LEBIH DEKAT
+        </p>
+        <h2>
+          Toyota impian Anda.
+          <br />
+          <span>Penawaran untuk Anda.</span>
+        </h2>
+        <p>
+          Ceritakan mobil yang Anda incar. Dapatkan informasi harga, pilihan
+          pembelian, dan penawaran yang sesuai kebutuhan.
+        </p>
+        <WhatsAppButton
+          label="Minta penawaran terbaru"
+          variant="white"
+          message={`Halo Pak ${site.name}, saya ingin mendapatkan penawaran terbaru Toyota untuk area ${site.area}.`}
+        />
+        <small>Harga dan ketersediaan dikonfirmasi melalui sales.</small>
+      </div>
+      <div class="promo-art">
+        <span class="promo-outline" aria-hidden="true">
+          LET’S GO
+        </span>
+        <Image
+          src={cars[2].image}
+          alt="Toyota Fortuner GR Sport"
+          width={620}
+          loading="lazy"
+        />
+        <span class="promo-art-caption">
+          PILIHAN ANDA. PERJALANAN ANDA. <Icon name="arrow" size={17} />
+        </span>
+      </div>
+    </div>
+    {active.length > 0 && (
+      <div class="offer-grid">
+        {active.map((promo) => (
+          <PromoCard promo={promo} />
+        ))}
+      </div>
+    )}
+  </div>
+</section>

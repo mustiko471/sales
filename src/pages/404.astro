@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout
+  title="Halaman tidak ditemukan | Fajar Toyota"
+  description="Halaman yang Anda cari tidak tersedia. Kembali ke beranda atau jelajahi pilihan mobil Toyota."
+  noindex
+>
+  <section class="container not-found">
+    <span class="not-found-number">404</span>
+    <p class="eyebrow">SEPERTINYA SALAH BELOK</p>
+    <h1>Mari kembali ke jalan yang tepat.</h1>
+    <p>Halaman yang Anda cari sudah berpindah atau belum tersedia.</p>
+    <div class="button-row">
+      <a class="button button-red" href="/">
+        Kembali ke beranda <Icon name="arrow" />
+      </a>
+      <a href="/mobil/" class="text-link">
+        Jelajahi mobil Toyota
+      </a>
+    </div>
+  </section>
+</BaseLayout>

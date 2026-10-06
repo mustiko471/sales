@@ -1,0 +1,29 @@
+---
+import { site } from '../data/site';
+import { whatsappLink } from '../utils/whatsapp';
+import Icon from './Icon.astro';
+interface Props {
+  message?: string;
+  label?: string;
+  variant?: 'green' | 'red' | 'outline' | 'white' | 'text';
+  class?: string;
+}
+const {
+  message = `Halo Pak ${site.name}, saya melihat website Anda dan ingin konsultasi mobil Toyota untuk area ${site.area}.`,
+  label = 'Konsultasi via WhatsApp',
+  variant = 'green',
+  class: className,
+} = Astro.props;
+---
+
+<a
+  href={whatsappLink(site.whatsapp, message)}
+  class:list={['button', `button-${variant}`, className]}
+  target="_blank"
+  rel="noopener noreferrer"
+  data-contact="whatsapp"
+>
+  <Icon name="whatsapp" />
+  <span>{label}</span>
+  <Icon name="diagonal" size={16} />
+</a>

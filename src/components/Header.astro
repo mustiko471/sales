@@ -1,0 +1,103 @@
+---
+import { site, isProduction } from '../data/site';
+import Icon from './Icon.astro';
+import WhatsAppButton from './WhatsAppButton.astro';
+const path = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'Beranda', active: path === '/' },
+  {
+    href: '/mobil/',
+    label: 'Mobil Toyota',
+    active: path.startsWith('/mobil/'),
+  },
+  { href: '/promo/', label: 'Penawaran', active: path === '/promo/' },
+  { href: '/#tentang', label: `Tentang ${site.name}`, active: false },
+  { href: '/kontak/', label: 'Kontak', active: path === '/kontak/' },
+];
+---
+
+{!isProduction && (
+  <div class="preview-bar">
+    <div class="container">
+      <span>Preview website</span>
+      <span>
+        Profil & katalog menunggu konfirmasi <span aria-hidden="true">·</span>{' '}
+        WhatsApp sudah aktif
+      </span>
+    </div>
+  </div>
+)}
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="brand" aria-label={`${site.name} Toyota, beranda`}>
+      <span class="brand-name">
+        {site.name.toLowerCase()}
+        <span>.</span>
+      </span>
+      <span class="brand-divider"></span>
+      <span class="brand-descriptor">
+        SALES TOYOTA
+        <br />
+        <strong>{site.area}</strong>
+      </span>
+    </a>
+    <button
+      class="menu-toggle"
+      aria-expanded="false"
+      aria-controls="main-navigation"
+      aria-label="Buka menu"
+      hidden
+    >
+      <Icon name="menu" />
+    </button>
+    <nav id="main-navigation" aria-label="Navigasi utama">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class:list={{ active: link.active }}
+          aria-current={link.active ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+    </nav>
+    <WhatsAppButton
+      label={`Chat ${site.name}`}
+      variant="outline"
+      class="header-contact"
+    />
+  </div>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const nav = document.querySelector<HTMLElement>('#main-navigation');
+  if (toggle && header && nav) {
+    toggle.hidden = false;
+    header.classList.add('menu-enhanced');
+    const closeMenu = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Buka menu');
+      header.classList.remove('menu-open');
+    };
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
+      header.classList.toggle('menu-open', open);
+    });
+    nav
+      .querySelectorAll('a')
+      .forEach((link) => link.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && header.classList.contains('menu-open')) {
+        closeMenu();
+        toggle.focus();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (event.target instanceof Node && !header.contains(event.target))
+        closeMenu();
+    });
+  }
+</script>

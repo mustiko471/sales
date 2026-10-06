@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PromoSection from '../components/PromoSection.astro';
+import FAQ from '../components/FAQ.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+const breadcrumbs = [
+  { name: 'Beranda', path: '/' },
+  { name: 'Penawaran Toyota', path: '/promo/' },
+];
+---
+
+<BaseLayout
+  title={`Promo & Penawaran Toyota ${site.area} | ${site.name}`}
+  description={`Minta informasi penawaran Toyota terbaru dari ${site.name} untuk area ${site.area}. Diskusikan model, harga OTR, dan pilihan pembelian melalui WhatsApp.`}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+  </div>
+  <section class="page-heading container">
+    <p class="eyebrow">
+      <span class="red-line"></span> PENAWARAN TOYOTA
+    </p>
+    <h1>
+      Mobil pilihan.
+      <br />
+      <span class="red-text">Rencana yang pas.</span>
+    </h1>
+    <p>
+      Setiap kebutuhan punya pertimbangan berbeda.
+      <br />
+      Mari temukan penawaran yang relevan untuk Anda.
+    </p>
+  </section>
+  <PromoSection />
+  <section class="section container offer-guide">
+    <div>
+      <p class="eyebrow">
+        <span class="red-line"></span> OBROLAN YANG LEBIH TERARAH
+      </p>
+      <h2>Siapkan tiga hal ini.</h2>
+      <p>Agar diskusi penawaran lebih sesuai kebutuhan Anda.</p>
+    </div>
+    <div class="offer-guide-list">
+      <article>
+        <Icon name="car" size={25} />
+        <div>
+          <h3>Model yang diminati</h3>
+          <p>
+            Sudah punya pilihan? Sebutkan model dan varian. Belum menentukan
+            juga boleh.
+          </p>
+        </div>
+      </article>
+      <article>
+        <Icon name="document" size={25} />
+        <div>
+          <h3>Rencana pembelian</h3>
+          <p>
+            Sampaikan preferensi tunai atau kredit serta rencana anggaran Anda.
+          </p>
+        </div>
+      </article>
+      <article>
+        <Icon name="pin" size={25} />
+        <div>
+          <h3>Wilayah & waktu</h3>
+          <p>
+            Informasikan wilayah registrasi dan perkiraan waktu pembelian
+            kendaraan.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+  <FAQ />
+</BaseLayout>

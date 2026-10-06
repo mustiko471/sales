@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CarCatalog from '../../components/CarCatalog.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { site, siteTitle } from '../../data/site';
+const breadcrumbs = [
+  { name: 'Beranda', path: '/' },
+  { name: 'Mobil Toyota', path: '/mobil/' },
+];
+---
+
+<BaseLayout
+  title={`Pilihan Mobil Toyota ${site.area} | ${siteTitle}`}
+  description={`Jelajahi MPV, SUV, dan Hybrid EV Toyota bersama ${site.name}. Bandingkan pilihan model dan minta harga terbaru untuk area ${site.area}.`}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+  </div>
+  <section class="page-heading container">
+    <p class="eyebrow">
+      <span class="red-line"></span> PILIHAN MOBIL TOYOTA
+    </p>
+    <h1>
+      Satu yang pas
+      <br />
+      untuk <span class="red-text">cerita Anda.</span>
+    </h1>
+    <p>
+      Dari kebutuhan keluarga hingga mobilitas harian.
+      <br />
+      Mulai jelajahi, lalu kita diskusikan pilihannya.
+    </p>
+  </section>
+  <section class="container catalog-page">
+    <h2 class="sr-only">Katalog mobil Toyota</h2>
+    <CarCatalog search />
+    <p class="catalog-disclaimer">
+      Gambar menampilkan varian tertentu. Harga, spesifikasi, warna, dan
+      ketersediaan dikonfirmasi melalui sales.
+    </p>
+  </section>
+  <ContactCTA />
+</BaseLayout>

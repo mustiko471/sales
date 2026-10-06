@@ -1,0 +1,94 @@
+---
+import { site, instagramUrl } from '../data/site';
+import Icon from './Icon.astro';
+---
+
+<section class="section profile-section" id="tentang">
+  <div class="container profile-grid">
+    <div class="profile-visual">
+      {site.portrait ? (
+        <img
+          class="portrait"
+          src={site.portrait}
+          alt={`${site.fullName}, ${site.role} ${site.area}`}
+          width="640"
+          height="720"
+          loading="lazy"
+        />
+      ) : (
+        <div
+          class="portrait-placeholder"
+          role="img"
+          aria-label="Foto profil sales belum tersedia"
+        >
+          <span class="profile-watermark" aria-hidden="true">
+            {site.name.charAt(0)}.
+          </span>
+          <div class="profile-placeholder-note">
+            <span class="tiny-label">KENALAN LEBIH DEKAT</span>
+            <strong>{site.name}.</strong>
+            <span>Foto profil segera hadir</span>
+          </div>
+        </div>
+      )}
+      <div class="profile-name-card">
+        <span>
+          <strong>{site.fullName}</strong>
+          <small>
+            {site.role} · {site.area}
+          </small>
+        </span>
+        <span class="red-square">
+          <Icon name="chat" size={24} />
+        </span>
+      </div>
+    </div>
+    <div class="profile-copy">
+      <p class="eyebrow">
+        <span class="red-line"></span> TEMAN DISKUSI ANDA
+      </p>
+      <h2>
+        Halo, saya {site.name}.<br />
+        Mari mulai dari
+        <br />
+        <span class="muted-heading">kebutuhan Anda.</span>
+      </h2>
+      <p>
+        Memilih mobil adalah keputusan personal. Ada kebutuhan keluarga,
+        rutinitas, dan rencana yang perlu dipertimbangkan.
+      </p>
+      <p>
+        Saya membantu Anda mengenal pilihan Toyota, membandingkan informasi yang
+        penting, dan mendiskusikan penawaran sebelum Anda mengambil keputusan.
+      </p>
+      <div class="profile-points">
+        <span>
+          <Icon name="check" /> Kenali pilihan model dan varian
+        </span>
+        <span>
+          <Icon name="check" /> Diskusikan rencana pembelian
+        </span>
+        <span>
+          <Icon name="check" /> Konfirmasikan kunjungan dan test drive
+        </span>
+      </div>
+      {site.dealer && (
+        <p class="profile-dealer">
+          {site.role} di {site.dealer}
+        </p>
+      )}
+      <a
+        href={instagramUrl || '/kontak/#instagram'}
+        target={instagramUrl ? '_blank' : undefined}
+        rel={instagramUrl ? 'noopener noreferrer' : undefined}
+        class="text-link instagram-link"
+      >
+        <Icon name="instagram" />{' '}
+        {instagramUrl
+          ? `Kenal lebih dekat di Instagram`
+          : 'Informasi Instagram'}
+        <Icon name="diagonal" size={16} />
+      </a>
+    </div>
+  </div>
+</section>

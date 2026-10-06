@@ -1,0 +1,98 @@
+---
+import {
+  site,
+  siteTitle,
+  siteUrl,
+  isProduction,
+  instagramUrl,
+} from '../data/site';
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
+  breadcrumbs?: { name: string; path: string }[];
+}
+const {
+  title,
+  description,
+  image = '/og-cover.png',
+  noindex = false,
+  schema = [],
+  breadcrumbs = [],
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const imageUrl = new URL(image, siteUrl).href;
+const blocked = !isProduction || noindex;
+const base = [
+  {
+    '@type': 'WebSite',
+    '@id': `${siteUrl}/#website`,
+    name: siteTitle,
+    url: siteUrl,
+    inLanguage: 'id-ID',
+  },
+  {
+    '@type': 'Person',
+    '@id': `${siteUrl}/#sales`,
+    name: site.fullName,
+    jobTitle: site.role,
+    url: siteUrl,
+    ...(site.portrait ? { image: new URL(site.portrait, siteUrl).href } : {}),
+    ...(instagramUrl ? { sameAs: [instagramUrl] } : {}),
+    ...(site.dealer
+      ? { worksFor: { '@type': 'Organization', name: site.dealer } }
+      : {}),
+  },
+  ...(breadcrumbs.length
+    ? [
+        {
+          '@type': 'BreadcrumbList',
+          itemListElement: breadcrumbs.map((item, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: item.name,
+            item: new URL(item.path, siteUrl).href,
+          })),
+        },
+      ]
+    : []),
+  ...schema,
+];
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta
+  name="robots"
+  content={
+    blocked ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'
+  }
+/>
+{isProduction && <link rel="canonical" href={canonical} />}
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={siteTitle} />
+<meta property="og:locale" content="id_ID" />
+<meta property="og:image" content={imageUrl} />
+<meta
+  property="og:image:alt"
+  content={`${site.name} — Sales Toyota ${site.area}`}
+/>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+{!blocked && (
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': base,
+    }).replace(/</g, '\\u003c')}
+  />
+)}
+{isProduction && <link rel="sitemap" href="/sitemap-index.xml" />}

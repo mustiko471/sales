@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets';
+import type { Car } from '../data/cars';
+import { site } from '../data/site';
+import Icon from './Icon.astro';
+import { whatsappLink } from '../utils/whatsapp';
+interface Props {
+  car: Car;
+}
+const { car } = Astro.props;
+---
+
+<article
+  class="car-card"
+  data-car
+  data-category={car.category}
+  data-hybrid={car.powertrain === 'Hybrid EV' ? 'true' : 'false'}
+  data-name={`${car.name} ${car.edition}`.toLowerCase()}
+>
+  <a
+    class="car-image-link"
+    href={`/mobil/${car.slug}/`}
+    aria-label={`Lihat Toyota ${car.name} ${car.edition}`}
+  >
+    <span class="car-category">{car.category}</span>
+    {car.powertrain === 'Hybrid EV' && (
+      <span class="car-hybrid">
+        <Icon name="leaf" size={13} /> HYBRID EV
+      </span>
+    )}
+    <Image
+      src={car.image}
+      alt={`Toyota ${car.name} ${car.edition}, tampak depan samping`}
+      width={520}
+      widths={[320, 520]}
+      sizes="(max-width: 600px) calc(100vw - 90px), (max-width: 850px) 42vw, 350px"
+      loading="lazy"
+    />
+  </a>
+  <div class="car-card-body">
+    <p class="tiny-label">
+      TOYOTA <span>· {car.edition}</span>
+    </p>
+    <h3>
+      <a href={`/mobil/${car.slug}/`}>{car.name}</a>
+    </h3>
+    <p class="car-tagline">{car.tagline}</p>
+    <div class="car-card-bottom">
+      <a
+        href={whatsappLink(
+          site.whatsapp,
+          `Halo Pak ${site.name}, saya tertarik Toyota ${car.name} ${car.edition}. Boleh minta harga dan ketersediaan terbaru?`,
+        )}
+        class="car-quote"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Minta penawaran <Icon name="diagonal" size={14} />
+      </a>
+      <a
+        href={`/mobil/${car.slug}/`}
+        class="circle-link"
+        aria-label={`Detail Toyota ${car.name}`}
+      >
+        <Icon name="arrow" size={19} />
+      </a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,32 @@
+---
+import type { Promotion } from '../utils/promotions';
+import { formatDate } from '../utils/promotions';
+import { site } from '../data/site';
+import WhatsAppButton from './WhatsAppButton.astro';
+interface Props {
+  promo: Promotion;
+}
+const { promo } = Astro.props;
+---
+
+<article class="offer-card">
+  <p class="eyebrow">PENAWARAN TOYOTA</p>
+  <h3>{promo.title}</h3>
+  <p>{promo.description}</p>
+  <p class="offer-period">
+    {formatDate(promo.startsAt)} – {formatDate(promo.endsAt)}
+  </p>
+  <details>
+    <summary>Syarat dan ketentuan</summary>
+    <ul>
+      {promo.terms.map((term) => (
+        <li>{term}</li>
+      ))}
+    </ul>
+    <p class="small-muted">Diperbarui {formatDate(promo.updatedAt)}</p>
+  </details>
+  <WhatsAppButton
+    label="Minta detail penawaran"
+    message={`Halo Pak ${site.name}, saya ingin mengetahui detail penawaran ${promo.title} yang saya lihat di website.`}
+  />
+</article>

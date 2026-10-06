@@ -1,0 +1,112 @@
+---
+import { cars } from '../data/cars';
+import CarCard from './CarCard.astro';
+import Icon from './Icon.astro';
+interface Props {
+  search?: boolean;
+}
+const { search = false } = Astro.props;
+---
+
+<div class="catalog" data-catalog>
+  <div class="catalog-controls" hidden>
+    <div class="filter-tabs" role="group" aria-label="Filter kategori mobil">
+      <button
+        type="button"
+        class="selected"
+        aria-pressed="true"
+        data-filter="all"
+      >
+        Semua mobil <span>{cars.length}</span>
+      </button>
+      <button type="button" aria-pressed="false" data-filter="MPV">
+        MPV
+      </button>
+      <button type="button" aria-pressed="false" data-filter="SUV">
+        SUV
+      </button>
+      <button type="button" aria-pressed="false" data-filter="hybrid">
+        <Icon name="leaf" size={15} /> Hybrid EV
+      </button>
+    </div>
+    {search && (
+      <label class="catalog-search">
+        <Icon name="search" size={18} />
+        <span class="sr-only">Cari model Toyota</span>
+        <input
+          type="search"
+          placeholder="Cari model Toyota..."
+          data-car-search
+        />
+      </label>
+    )}
+  </div>
+  <p class="sr-only" aria-live="polite" data-filter-status>
+    {cars.length} mobil ditampilkan
+  </p>
+  <div class="car-grid">
+    {cars.map((car) => (
+      <CarCard car={car} />
+    ))}
+  </div>
+  <div class="catalog-empty" hidden>
+    <Icon name="search" size={32} />
+    <h3>Mobil belum ditemukan</h3>
+    <p>Coba kata pencarian lain atau lihat semua kategori.</p>
+    <button class="button button-outline" data-reset type="button">
+      Tampilkan semua mobil
+    </button>
+  </div>
+</div>
+<script>
+  document
+    .querySelectorAll<HTMLElement>('[data-catalog]')
+    .forEach((catalog) => {
+      const controls = catalog.querySelector<HTMLElement>('.catalog-controls');
+      const cards = [...catalog.querySelectorAll<HTMLElement>('[data-car]')];
+      const buttons = [
+        ...catalog.querySelectorAll<HTMLButtonElement>('[data-filter]'),
+      ];
+      const search =
+        catalog.querySelector<HTMLInputElement>('[data-car-search]');
+      let filter = 'all';
+      if (controls) controls.hidden = false;
+      function update() {
+        const query = search?.value.toLowerCase().trim() || '';
+        let total = 0;
+        cards.forEach((card) => {
+          const categoryMatches =
+            filter === 'all' ||
+            (filter === 'hybrid'
+              ? card.dataset.hybrid === 'true'
+              : card.dataset.category === filter);
+          const matches =
+            categoryMatches && Boolean(card.dataset.name?.includes(query));
+          card.hidden = !matches;
+          if (matches) total++;
+        });
+        const empty = catalog.querySelector<HTMLElement>('.catalog-empty');
+        if (empty) empty.hidden = total > 0;
+        const status = catalog.querySelector('[data-filter-status]');
+        if (status) status.textContent = `${total} mobil ditampilkan`;
+        buttons.forEach((button) => {
+          const active = button.dataset.filter === filter;
+          button.classList.toggle('selected', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+      }
+      buttons.forEach((button) =>
+        button.addEventListener('click', () => {
+          filter = button.dataset.filter || 'all';
+          update();
+        }),
+      );
+      search?.addEventListener('input', update);
+      catalog.querySelector('[data-reset]')?.addEventListener('click', () => {
+        filter = 'all';
+        if (search) search.value = '';
+        update();
+        buttons[0]?.focus();
+      });
+    });
+</script>

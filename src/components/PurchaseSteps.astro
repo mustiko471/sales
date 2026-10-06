@@ -1,0 +1,47 @@
+---
+const steps = [
+  {
+    title: 'Ceritakan kebutuhan',
+    text: 'Mulai dari mobil yang Anda suka, kebutuhan sehari-hari, dan rencana anggaran.',
+  },
+  {
+    title: 'Temukan pilihannya',
+    text: 'Diskusikan model, varian, dan rincian penawaran yang relevan untuk Anda.',
+  },
+  {
+    title: 'Kenali lebih dekat',
+    text: 'Konfirmasikan jadwal kunjungan atau test drive sesuai ketersediaan unit.',
+  },
+  {
+    title: 'Wujudkan rencana',
+    text: 'Lanjutkan proses pembelian dengan informasi lengkap melalui prosedur dealer.',
+  },
+];
+---
+
+<section class="section steps-section">
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">
+          <span class="red-line"></span> LANGKAH YANG SEDERHANA
+        </p>
+        <h2>Dari obrolan, jadi perjalanan.</h2>
+      </div>
+      <p>
+        Saya bantu Anda memahami
+        <br />
+        setiap langkahnya.
+      </p>
+    </div>
+    <ol class="steps-grid">
+      {steps.map((step, index) => (
+        <li>
+          <span class="step-number">0{index + 1}</span>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

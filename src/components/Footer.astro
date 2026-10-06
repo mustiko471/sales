@@ -1,0 +1,69 @@
+---
+import { site, instagramUrl } from '../data/site';
+import Icon from './Icon.astro';
+import { whatsappLink } from '../utils/whatsapp';
+---
+
+<footer class="site-footer">
+  <div class="container footer-top">
+    <div>
+      <a class="brand footer-brand" href="/">
+        {site.name.toLowerCase()}
+        <span>.</span>
+      </a>
+      <p>
+        Teman diskusi untuk Toyota
+        <br />
+        dan perjalanan Anda berikutnya.
+      </p>
+      <span class="footer-location">
+        <Icon name="pin" size={15} /> {site.area}
+      </span>
+    </div>
+    <div>
+      <h2>Jelajahi</h2>
+      <a href="/mobil/">Pilihan mobil</a>
+      <a href="/promo/">Penawaran Toyota</a>
+      <a href="/#tentang">Tentang {site.name}</a>
+    </div>
+    <div>
+      <h2>Mari terhubung</h2>
+      <a
+        href={whatsappLink(
+          site.whatsapp,
+          `Halo Pak ${site.name}, saya ingin konsultasi mobil Toyota.`,
+        )}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        WhatsApp <Icon name="diagonal" size={14} />
+      </a>
+      {instagramUrl ? (
+        <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
+          Instagram <Icon name="diagonal" size={14} />
+        </a>
+      ) : (
+        <a href="/kontak/#instagram">
+          Instagram <span class="small-muted">Segera hadir</span>
+        </a>
+      )}
+      <a href="/kontak/">Informasi kontak</a>
+    </div>
+    <div class="footer-note">
+      <h2>
+        {site.name} · Sales Toyota {site.area}
+      </h2>
+      <p>{site.dealer || 'Website profil personal sales Toyota.'}</p>
+      <p>
+        Informasi harga, penawaran, dan ketersediaan kendaraan dikonfirmasi
+        melalui sales.
+      </p>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>
+      © {new Date().getFullYear()} {site.name}. Semua hak dilindungi.
+    </span>
+    <span>Perjalanan yang baik dimulai dari pilihan yang tepat.</span>
+  </div>
+</footer>

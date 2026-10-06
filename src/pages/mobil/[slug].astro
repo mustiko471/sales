@@ -1,0 +1,197 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import WhatsAppButton from '../../components/WhatsAppButton.astro';
+import CarCard from '../../components/CarCard.astro';
+import PromoCard from '../../components/PromoCard.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import Icon from '../../components/Icon.astro';
+import { cars, type Car } from '../../data/cars';
+import { promos } from '../../data/promos';
+import { activePromotions } from '../../utils/promotions';
+import { site, siteUrl } from '../../data/site';
+export function getStaticPaths() {
+  return cars.map((car) => ({ params: { slug: car.slug }, props: { car } }));
+}
+interface Props {
+  car: Car;
+}
+const { car } = Astro.props;
+const breadcrumbs = [
+  { name: 'Beranda', path: '/' },
+  { name: 'Mobil Toyota', path: '/mobil/' },
+  { name: car.name, path: `/mobil/${car.slug}/` },
+];
+const offers = activePromotions(promos).filter((promo) =>
+  promo.carSlugs.includes(car.slug),
+);
+const related = cars
+  .filter((item) => item.slug !== car.slug)
+  .sort(
+    (a, b) =>
+      Number(b.category === car.category) - Number(a.category === car.category),
+  )
+  .slice(0, 3);
+const message = `Halo Pak ${site.name}, saya tertarik Toyota ${car.name} ${car.edition}. Boleh minta harga, pilihan varian, dan ketersediaan terbaru untuk area ${site.area}?`;
+const schema = [
+  {
+    '@type': 'Product',
+    name: `Toyota ${car.name} ${car.edition}`,
+    description: car.description,
+    image: new URL(car.image.src, siteUrl).href,
+    brand: { '@type': 'Brand', name: 'Toyota' },
+    category: car.category,
+    url: new URL(`/mobil/${car.slug}/`, siteUrl).href,
+  },
+];
+---
+
+<BaseLayout
+  title={`Toyota ${car.name} ${site.area} | Konsultasi dengan ${site.name}`}
+  description={car.description}
+  image={car.image.src}
+  breadcrumbs={breadcrumbs}
+  schema={schema}
+>
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+  </div>
+  <section class="container product-hero">
+    <div class="product-showcase">
+      <div class="product-badges">
+        <span class="car-category">{car.category}</span>
+        {car.powertrain === 'Hybrid EV' && (
+          <span class="hybrid-badge">
+            <Icon name="leaf" size={14} /> Hybrid EV
+          </span>
+        )}
+      </div>
+      <span class="product-watermark" aria-hidden="true">
+        TOYOTA
+      </span>
+      <Image
+        src={car.image}
+        alt={`Toyota ${car.name} ${car.edition}`}
+        width={800}
+        loading="eager"
+        fetchpriority="high"
+      />
+      <p>
+        Gambar varian {car.edition}. Pilihan unit dikonfirmasi melalui sales.
+      </p>
+    </div>
+    <div class="product-intro">
+      <p class="eyebrow">TOYOTA · {car.edition.toUpperCase()}</p>
+      <h1>{car.name}</h1>
+      <p class="product-tagline">{car.tagline}</p>
+      <p>{car.description}</p>
+      <div class="product-spec-tags">
+        <span>
+          <Icon name="car" size={17} /> {car.category}
+        </span>
+        <span>
+          <Icon
+            name={car.powertrain === 'Hybrid EV' ? 'leaf' : 'car'}
+            size={17}
+          />{' '}
+          {car.powertrain}
+        </span>
+        <span>
+          <Icon name="pin" size={17} /> {site.area}
+        </span>
+      </div>
+      <div class="product-price">
+        <span class="tiny-label">PENAWARAN PERSONAL</span>
+        <h2>Harga terbaru? Mari diskusikan.</h2>
+        <p>
+          Dapatkan informasi harga OTR, pilihan pembelian, dan ketersediaan
+          untuk kebutuhan Anda.
+        </p>
+        <WhatsAppButton label="Minta harga & penawaran" message={message} />
+        <a
+          class="text-link brochure-link"
+          href={car.brochure}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="document" size={17} /> Lihat brosur Toyota{' '}
+          <Icon name="diagonal" size={15} />
+        </a>
+      </div>
+    </div>
+  </section>
+  <section class="section product-story">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">
+            <span class="red-line"></span> KENALI PILIHAN ANDA
+          </p>
+          <h2>
+            Sebelum memutuskan,
+            <br />
+            mari kenali lebih dekat.
+          </h2>
+        </div>
+        <p>{car.audience}</p>
+      </div>
+      <div class="product-points">
+        {car.talkingPoints.map((point, index) => (
+          <article>
+            <span class="step-number">0{index + 1}</span>
+            <h3>{point.title}</h3>
+            <p>{point.text}</p>
+          </article>
+        ))}
+      </div>
+      <div class="specification-note">
+        <Icon name="document" size={24} />
+        <div>
+          <h3>Spesifikasi sesuai varian</h3>
+          <p>
+            Detail perlengkapan dapat berbeda antartipe. Periksa brosur resmi
+            dan konfirmasikan model yang Anda inginkan bersama {site.name}.
+          </p>
+          <a
+            class="text-link"
+            href={car.source}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Referensi produk Toyota <Icon name="diagonal" size={15} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  {offers.length > 0 && (
+    <section class="section container">
+      <h2>Penawaran untuk {car.name}</h2>
+      <div class="offer-grid">
+        {offers.map((promo) => (
+          <PromoCard promo={promo} />
+        ))}
+      </div>
+    </section>
+  )}
+  <section class="section container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">
+          <span class="red-line"></span> BANDINGKAN PILIHAN
+        </p>
+        <h2>Kenali Toyota lainnya.</h2>
+      </div>
+      <a href="/mobil/" class="text-link">
+        Semua mobil <Icon name="arrow" size={18} />
+      </a>
+    </div>
+    <div class="car-grid">
+      {related.map((item) => (
+        <CarCard car={item} />
+      ))}
+    </div>
+  </section>
+  <ContactCTA />
+</BaseLayout>

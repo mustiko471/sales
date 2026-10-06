@@ -1,0 +1,123 @@
+---
+import { Image } from 'astro:assets';
+import { cars } from '../data/cars';
+import { site } from '../data/site';
+import WhatsAppButton from './WhatsAppButton.astro';
+import Icon from './Icon.astro';
+const featured = cars[0];
+---
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">
+        <span class="red-line"></span> PILIHAN TOYOTA, SENTUHAN PERSONAL
+      </p>
+      <h1>
+        <span class="hero-identity">
+          {site.name}, Sales Toyota {site.area}.
+        </span>
+        Untuk setiap
+        <br />
+        cerita <span class="red-text">perjalanan.</span>
+      </h1>
+      <p class="hero-description">
+        Mobil yang tepat berawal dari obrolan yang tepat. Saya bantu Anda
+        mengenal pilihan Toyota dan menemukan yang sesuai kebutuhan.
+      </p>
+      <div class="button-row">
+        <WhatsAppButton />
+        <a href="/mobil/" class="text-link">
+          Jelajahi mobil <Icon name="arrow" size={18} />
+        </a>
+      </div>
+      <div class="hero-reassurance">
+        <span>
+          <Icon name="check" size={16} /> Konsultasi personal
+        </span>
+        <span>
+          <Icon name="check" size={16} /> Penawaran sesuai kebutuhan
+        </span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-rings" aria-hidden="true"></div>
+      <div class="hero-model-name" aria-hidden="true">
+        ZENIX
+      </div>
+      <div class="hero-car">
+        <Image
+          src={featured.image}
+          alt="Toyota Kijang Innova Zenix Hybrid EV berwarna putih"
+          width={780}
+          widths={[360, 540, 780]}
+          sizes="(max-width: 600px) 100vw, 55vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="hero-model-label">
+        <span>
+          <span class="tiny-label">TOYOTA</span>
+          <strong>Kijang Innova Zenix</strong>
+        </span>
+        <span class="hybrid-badge">
+          <Icon name="leaf" size={13} /> Hybrid EV
+        </span>
+      </div>
+      <a class="sales-mini" href="/#tentang">
+        <span class="sales-avatar">
+          {site.portrait ? (
+            <img
+              src={site.portrait}
+              alt={site.fullName}
+              width="48"
+              height="48"
+            />
+          ) : (
+            site.name.charAt(0)
+          )}
+        </span>
+        <span>
+          <small>Halo, saya {site.name}</small>
+          <strong>Teman memilih Toyota Anda.</strong>
+        </span>
+        <span class="sales-mini-arrow">
+          <Icon name="diagonal" size={18} />
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+<div class="value-strip">
+  <div class="container value-grid">
+    <div>
+      <Icon name="chat" size={23} />
+      <span>
+        <strong>Langsung dengan sales</strong>
+        <small>Obrolan yang lebih personal</small>
+      </span>
+    </div>
+    <div>
+      <Icon name="car" size={23} />
+      <span>
+        <strong>Pilihan sesuai kebutuhan</strong>
+        <small>Dari perjalanan harian hingga keluarga</small>
+      </span>
+    </div>
+    <div>
+      <Icon name="document" size={23} />
+      <span>
+        <strong>Rincian yang jelas</strong>
+        <small>Tanyakan harga, tipe, dan penawaran</small>
+      </span>
+    </div>
+    <div>
+      <Icon name="pin" size={23} />
+      <span>
+        <strong>Untuk area {site.area}</strong>
+        <small>Konsultasikan rencana kunjungan</small>
+      </span>
+    </div>
+  </div>
+</div>

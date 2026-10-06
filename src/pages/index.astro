@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import CarCatalog from '../components/CarCatalog.astro';
+import PromoSection from '../components/PromoSection.astro';
+import SalesProfile from '../components/SalesProfile.astro';
+import PurchaseSteps from '../components/PurchaseSteps.astro';
+import FAQ from '../components/FAQ.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+import Icon from '../components/Icon.astro';
+import { site, siteTitle } from '../data/site';
+---
+
+<BaseLayout
+  title={`${siteTitle} | Mobil & Penawaran Toyota`}
+  description={`Kenali ${site.name}, sales Toyota area ${site.area}. Jelajahi pilihan mobil, minta penawaran terbaru, dan konsultasikan pembelian melalui WhatsApp.`}
+>
+  <Hero />
+  <section class="section catalog-section" id="mobil">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">
+            <span class="red-line"></span> TEMUKAN TOYOTA ANDA
+          </p>
+          <h2>
+            Berbeda kebutuhan.
+            <br />
+            Tetap ada pilihannya.
+          </h2>
+        </div>
+        <a href="/mobil/" class="text-link">
+          Lihat semua mobil <Icon name="arrow" size={18} />
+        </a>
+      </div>
+      <CarCatalog />
+      <p class="catalog-disclaimer">
+        Pilihan model dari katalog Toyota. Hubungi {site.name} untuk harga,
+        varian, dan ketersediaan terbaru.
+      </p>
+    </div>
+  </section>
+  <PromoSection />
+  <SalesProfile />
+  <PurchaseSteps />
+  <FAQ />
+  <ContactCTA />
+</BaseLayout>

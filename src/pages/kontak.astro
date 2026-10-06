@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import Icon from '../components/Icon.astro';
+import { site, instagramUrl } from '../data/site';
+const breadcrumbs = [
+  { name: 'Beranda', path: '/' },
+  { name: 'Kontak', path: '/kontak/' },
+];
+---
+
+<BaseLayout
+  title={`Kontak ${site.name} Sales Toyota ${site.area} | WhatsApp & Instagram`}
+  description={`Hubungi ${site.name} melalui WhatsApp ${site.phoneDisplay} untuk konsultasi mobil Toyota, informasi penawaran, dan rencana kunjungan area ${site.area}.`}
+  breadcrumbs={breadcrumbs}
+>
+  <div class="container">
+    <Breadcrumbs items={breadcrumbs} />
+  </div>
+  <section class="page-heading container">
+    <p class="eyebrow">
+      <span class="red-line"></span> MARI TERHUBUNG
+    </p>
+    <h1>
+      Obrolan pertama.
+      <br />
+      <span class="red-text">Banyak kemungkinan.</span>
+    </h1>
+    <p>
+      Sudah tahu mobil yang dicari atau masih ingin membandingkan?
+      <br />
+      Ceritakan kebutuhan Anda kepada {site.name}.
+    </p>
+  </section>
+  <section class="container contact-grid">
+    <article class="contact-card contact-whatsapp">
+      <span class="contact-icon">
+        <Icon name="whatsapp" size={30} />
+      </span>
+      <span class="tiny-label">HUBUNGI LANGSUNG</span>
+      <h2>WhatsApp</h2>
+      <p>Untuk konsultasi model, informasi harga, dan permintaan penawaran.</p>
+      <strong class="contact-phone">{site.phoneDisplay}</strong>
+      <WhatsAppButton label={`Chat dengan ${site.name}`} />
+      <small>Pesan akan terbuka di WhatsApp Anda.</small>
+    </article>
+    <article class="contact-card" id="instagram">
+      <span class="contact-icon instagram-icon">
+        <Icon name="instagram" size={30} />
+      </span>
+      <span class="tiny-label">KENAL LEBIH DEKAT</span>
+      <h2>Instagram</h2>
+      <p>Ikuti aktivitas sales dan cerita seputar pilihan mobil Toyota.</p>
+      {instagramUrl ? (
+        <>
+          <strong class="contact-phone">
+            @{site.instagram.replace(/^@/, '')}
+          </strong>
+          <a
+            class="button button-outline"
+            href={instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="instagram" /> Lihat Instagram{' '}
+            <Icon name="diagonal" size={16} />
+          </a>
+        </>
+      ) : (
+        <>
+          <strong class="contact-phone muted-heading">Segera hadir.</strong>
+          <p class="small-muted">
+            Sementara ini, Anda dapat terhubung langsung melalui WhatsApp.
+          </p>
+        </>
+      )}
+    </article>
+  </section>
+  <section class="section container contact-location">
+    <div>
+      <p class="eyebrow">
+        <span class="red-line"></span> ATUR RENCANA KUNJUNGAN
+      </p>
+      <h2>
+        Sampai bertemu
+        <br />
+        di {site.area}.
+      </h2>
+      <p>
+        Hubungi terlebih dahulu untuk konfirmasi lokasi, waktu, dan ketersediaan
+        unit yang ingin Anda lihat.
+      </p>
+      <WhatsAppButton
+        label="Diskusikan jadwal kunjungan"
+        variant="outline"
+        message={`Halo Pak ${site.name}, saya ingin mengatur kunjungan atau test drive Toyota. Boleh minta lokasi dealer dan jadwal yang tersedia?`}
+      />
+    </div>
+    <div class="location-panel">
+      <Icon name="pin" size={32} />
+      <h3>{site.dealer || `Area ${site.area}`}</h3>
+      <p>
+        {site.address ||
+          'Lokasi pertemuan dan dealer dikonfirmasi melalui WhatsApp.'}
+      </p>
+      {site.hours && (
+        <p>
+          <strong>Jam layanan:</strong> {site.hours}
+        </p>
+      )}
+      {site.mapsUrl && (
+        <a
+          href={site.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-link"
+        >
+          Buka Google Maps <Icon name="diagonal" size={17} />
+        </a>
+      )}
+      <div class="location-lines" aria-hidden="true"></div>
+    </div>
+  </section>
+</BaseLayout>
